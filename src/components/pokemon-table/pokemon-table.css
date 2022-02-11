@@ -1,0 +1,3 @@
+.rs-pagination-group-limit, .rs-pagination-group > .rs-divider.rs-divider-vertical {
+    display: none;
+}

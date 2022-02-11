@@ -1,11 +1,11 @@
 // Types
-import IPokemon from "./pokemon.type";
+import Pokemon from "./pokemon.type";
 
-export default interface IPokemons {
+export default interface Pokemons {
   count: number,
   message: string,
   next: string,
   previous: string,
-  results: IPokemon[],
+  results: Pokemon[],
   status: boolean
 }
