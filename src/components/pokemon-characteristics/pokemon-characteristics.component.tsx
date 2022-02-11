@@ -1,4 +1,8 @@
 import { Component } from 'react';
+// Libraries
+import { connect } from 'react-redux';
+import { PokemonsState } from '../../redux/reducers/pokemonsReducer';
+import { setCharacteristics } from '../../redux/actions/pokemonsActions';
 // Styles
 import './pokemon-characteristics.css';
 // Types
@@ -12,6 +16,22 @@ class PokemonCharacteritics extends Component<Props, State> {
             </div>
         );
     }
+
+    componentDidMount = () => {
+        if (!this.props.characteristics) this.props.history.push('/');
+        else console.log(this.props.characteristics);
+    }
 }
 
-export default PokemonCharacteritics;
+
+const mapStateToProps = (state: PokemonsState) => {
+    return {
+        characteristics: state.characteristics
+    };
+}
+
+const mapDispatchToProps = {
+    setCharacteristics
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PokemonCharacteritics);

@@ -5,19 +5,17 @@ import ClosedPokeball from '../../assets/pictures/closed-pokeball.png';
 // Components
 import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material';
 // Libraries
-import { connect, ConnectedProps } from 'react-redux';
+import { connect } from 'react-redux';
 import { PokemonsState } from '../../redux/reducers/pokemonsReducer';
-import { setPokemons } from '../../redux/actions/pokemonsActions';
+import { setPokemons, setCharacteristics } from '../../redux/actions/pokemonsActions';
 // Services
 import PokemonService from '../../services/pokemon.service';
 // Styles
 import './pokemon-table.css';
 // Types
-import { State } from './pokemon-table.type';
+import { Props, State } from './pokemon-table.type';
 import IPokemons from '../../types/pokemons.type';
 import IPokemon from '../../types/pokemon.type';
-
-type Props = ConnectedProps<typeof connector>;
 
 class PokemonTable extends Component<Props, State> {
     constructor(props: Props) {
@@ -32,6 +30,7 @@ class PokemonTable extends Component<Props, State> {
 
     render() {
         const { totalCount, pokemons } = this.state;
+        console.log(this.props.history);
         return (
             <Paper>
                 <TableContainer>
@@ -62,7 +61,7 @@ class PokemonTable extends Component<Props, State> {
     }
 
     componentDidMount = () => {
-        PokemonService.getAtPage(1, this.state.elementsPerPage).then((pokemons: IPokemons, ) => {
+        PokemonService.getAtPage(1, this.state.elementsPerPage).then((pokemons: IPokemons,) => {
             this.props.setPokemons(pokemons.results);
             this.setState({ totalCount: pokemons.count, pokemons: pokemons.results, loadedPages: [1] });
         });
@@ -95,9 +94,9 @@ class PokemonTable extends Component<Props, State> {
     handleChangePage = () => console.log('changed');
     handleChangeRowsPerPage = () => console.log('changed');
     openCharacteristics = (url: string) => {
-        console.log(this.props.pokemons);
         PokemonService.getCharacteristics(url).then(characteristics => {
-            console.log(characteristics);
+            this.props.setCharacteristics(characteristics);
+            this.props.history.push('/characteristics');
         });
     }
 }
@@ -109,8 +108,8 @@ const mapStateToProps = (state: PokemonsState) => {
 }
 
 const mapDispatchToProps = {
-    setPokemons
+    setPokemons,
+    setCharacteristics
 }
 
-const connector = connect(mapStateToProps, mapDispatchToProps);
-export default connector(PokemonTable);
+export default connect(mapStateToProps, mapDispatchToProps)(PokemonTable);
