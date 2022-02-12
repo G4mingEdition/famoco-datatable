@@ -27,13 +27,13 @@ class PokemonTable extends Component<Props, State> {
                 sortBy: 'id',
                 sortDirection: 'asc',
                 direction: 'asc'
-            },
-            pokemons: []
+            }
         }
     }
 
     render() {
-        const { currentPage, elementsPerPage, pokemons } = this.state;
+        const { pokemons } = this.props;
+        const { currentPage, elementsPerPage } = this.state;
 
         return (
             <Grid container spacing={2} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '50px 0' }}>
@@ -52,10 +52,8 @@ class PokemonTable extends Component<Props, State> {
     }
 
     componentDidMount = () => {
-        PokemonService.getAll().then((pokemons: Pokemon[]) => {
-            this.props.setPokemons(pokemons);
-            this.setState({ pokemons });
-        });
+        if (!this.props.pokemons.length)
+            PokemonService.getAll().then((pokemons: Pokemon[]) => this.props.setPokemons(pokemons));
     }
 
     renderDataTable = (currentPage: number, elementsPerPage: number, pokemons: Pokemon[]) => {
@@ -138,7 +136,7 @@ class PokemonTable extends Component<Props, State> {
 
     handleChangePage = (event: unknown, newPage: number) => this.setState({ currentPage: newPage });
     handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { pokemons } = this.state;
+        const { pokemons } = this.props;
         let currentPage = this.state.currentPage;
         const elementsPerPage = parseInt(event.target.value, 10);
         let limit = (currentPage + 1) * elementsPerPage;

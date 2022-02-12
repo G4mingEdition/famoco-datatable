@@ -19,5 +19,4 @@ export interface State {
         sortDirection: SortDirection | undefined,
         direction: 'desc' | 'asc' | undefined
     }
-    pokemons: Pokemon[]
 }
