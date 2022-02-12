@@ -5,13 +5,19 @@ const theme = createTheme({
         mode: 'dark',
     },
     components: {
-        MuiTableFooter: {
+        MuiPaper: {
             styleOverrides: {
                 root: {
-                    left: 0,
-                    bottom: 0,
-                    zIndex: 2,
-                    position: 'sticky'
+                    backgroundColor: '#0A285F',
+                    borderRadius: '10px'
+                }
+            }
+        },
+        MuiTableCell: {
+            styleOverrides: {
+                root: {
+                    backgroundColor: '#0A285F',
+                    textAlign: 'center'
                 }
             }
         }

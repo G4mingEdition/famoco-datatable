@@ -11,12 +11,14 @@ import theme from './themes/theme';
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <BrowserRouter>
-        <Switch>
-          <Route path='/' exact render={props => <PokemonTable {...props} />} />
-          <Route path='/characteristics' render={props => <PokemonCharacteritics {...props} />} />
-        </Switch>
-      </BrowserRouter>
+      <div style={{ height: '100vh', overflowX: 'hidden' }}>
+        <BrowserRouter>
+          <Switch>
+            <Route path='/' exact render={props => <PokemonTable {...props} />} />
+            <Route path='/characteristics' render={props => <PokemonCharacteritics {...props} />} />
+          </Switch>
+        </BrowserRouter>
+      </div>
     </ThemeProvider>
   );
 }

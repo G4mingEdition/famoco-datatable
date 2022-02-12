@@ -1,19 +1,23 @@
 // Libraries
 import { RouteComponentProps } from 'react-router-dom';
-import { CharacteristicsAction, PokemonsAction } from '../../redux/actions/pokemonsActions';
 // Types
 import Pokemon from "../../types/pokemon.type";
 import Characteristics from '../../types/characteristics.type';
+import { SortDirection } from '@mui/material';
 
 export interface Props extends RouteComponentProps {
     pokemons: Pokemon[],
-    setPokemons: (pokemons: Pokemon[]) => PokemonsAction,
-    setCharacteristics: (characteristics: Characteristics | null) => CharacteristicsAction
+    setPokemons: (pokemons: Pokemon[]) => Object,
+    setCharacteristics: (characteristics: Characteristics | null) => Object
 }
 
 export interface State {
-    totalCount: number,
+    currentPage: number,
     elementsPerPage: number,
-    pokemons: Pokemon[],
-    loadedPages: number[]
+    sort: {
+        sortBy: 'id' | 'name' | 'picture',
+        sortDirection: SortDirection | undefined,
+        direction: 'desc' | 'asc' | undefined
+    }
+    pokemons: Pokemon[]
 }

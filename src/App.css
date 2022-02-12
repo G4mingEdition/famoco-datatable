@@ -1,10 +1,19 @@
+body {
+    background-image: url('./assets/gifs/landscape.gif');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    overflow: hidden;
+    height: 100vh;
+}
+
 .pokeball {
     position: relative;
     width: 48px;
     height: 48px;
 }
 
-.pokeball > img {
+.pokeball>img {
     position: absolute;
     top: 0;
     left: 0;
@@ -14,6 +23,6 @@
     display: none;
 }
 
-.pokeball:hover > .hover {
+.pokeball:hover>.hover {
     display: block;
 }

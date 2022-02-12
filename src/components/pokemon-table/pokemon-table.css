@@ -1,3 +1,17 @@
-.rs-pagination-group-limit, .rs-pagination-group > .rs-divider.rs-divider-vertical {
-    display: none;
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #0075BE;
+    border-top-right-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #FFCC00;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #D5A100;
 }

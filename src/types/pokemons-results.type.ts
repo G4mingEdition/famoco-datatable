@@ -1,8 +1,10 @@
 // Types
-import Pokemons from './pokemons.type';
+import Pokemon from './pokemon.type';
 
 export default interface PokemonsResults {
   data: {
-    pokemons: Pokemons
+    pokemons: {
+      results: Pokemon[]
+    }
   }
 }

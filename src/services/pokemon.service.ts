@@ -1,18 +1,15 @@
 // Libraries
 import axios from 'axios';
+import PokemonsResults from '../types/pokemons-results.type';
 // Types
-import IPokemonsResults from '../types/pokemons-results.type';
 
 class PokemonService {
-  getAtPage(page: number, elementsPerPage: number) {
-    const gqlQuery = `query pokemons($limit: Int, $offset: Int) { pokemons(limit: $limit, offset: $offset) { count next previous status message results { url name image } } }`;
-    const gqlVariables = {
-      offset: 1 + (elementsPerPage * (page - 1)),
-      limit: elementsPerPage,
-    };
+  getAll() {
+    const gqlQuery = `query pokemons($limit: Int, $offset: Int) { pokemons(limit: $limit, offset: $offset) { results { id url name image } } }`;
+    const gqlVariables = { offset: 0, limit: 151 };
 
-    return axios.post<IPokemonsResults>('https://graphql-pokeapi.graphcdn.app/', { query: gqlQuery, variables: gqlVariables })
-      .then(response => (response.data.data.pokemons))
+    return axios.post<PokemonsResults>('https://graphql-pokeapi.graphcdn.app/', { query: gqlQuery, variables: gqlVariables })
+      .then(response => (response.data.data.pokemons.results))
       .catch(error => (error));
   }
 

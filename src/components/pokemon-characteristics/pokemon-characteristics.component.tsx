@@ -23,7 +23,6 @@ class PokemonCharacteritics extends Component<Props, State> {
     }
 }
 
-
 const mapStateToProps = (state: PokemonsState) => {
     return {
         characteristics: state.characteristics
