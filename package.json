@@ -2,7 +2,7 @@
   "name": "meotec-datatable",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://g4mingedition.github.io/meotec-datatable",
+  "homepage": "https://g4mingedition.github.io/meotec-datatable/",
   "dependencies": {
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",

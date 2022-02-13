@@ -1,6 +1,5 @@
 import { Component } from 'react';
 // Assets
-import PokemonLogo from '../../assets/pictures/pokemon.png';
 import OpenedPokeball from '../../assets/pictures/opened-pokeball.png';
 import ClosedPokeball from '../../assets/pictures/closed-pokeball.png';
 // Components
@@ -65,12 +64,12 @@ class PokemonTable extends Component<Props, State> {
                         <TableHead>
                             <TableRow>
                                 <TableCell sortDirection={sort.sortBy === 'id' ? sort.sortDirection : false}>
-                                    <TableSortLabel active={sort.sortBy == 'id'} direction={sort.sortBy === 'id' ? sort.direction : 'asc'} onClick={() => this.handleSort('id')}>
+                                    <TableSortLabel active={sort.sortBy === 'id'} direction={sort.sortBy === 'id' ? sort.direction : 'asc'} onClick={() => this.handleSort('id')}>
                                         ID
                                     </TableSortLabel>
                                 </TableCell>
                                 <TableCell sortDirection={sort.sortBy === 'name' ? sort.sortDirection : false}>
-                                    <TableSortLabel active={sort.sortBy == 'name'} direction={sort.sortBy === 'name' ? sort.direction : 'asc'} onClick={() => this.handleSort('name')}>
+                                    <TableSortLabel active={sort.sortBy === 'name'} direction={sort.sortBy === 'name' ? sort.direction : 'asc'} onClick={() => this.handleSort('name')}>
                                         Name
                                     </TableSortLabel>
                                 </TableCell>
@@ -98,9 +97,9 @@ class PokemonTable extends Component<Props, State> {
         const { sort } = this.state;
         const pokemonsList: Pokemon[] = JSON.parse(JSON.stringify(pokemons));
         if (sort.direction) {
-            if (sort.sortBy === 'id' && sort.direction == 'desc') pokemonsList.reverse();
-            else if (sort.sortBy === 'name' && sort.direction == 'asc') pokemonsList.sort((a: Pokemon, b: Pokemon) => (a.name > b.name ? 1 : -1));
-            else if (sort.sortBy === 'name' && sort.direction == 'desc') pokemonsList.sort((a: Pokemon, b: Pokemon) => (a.name < b.name ? 1 : -1));
+            if (sort.sortBy === 'id' && sort.direction === 'desc') pokemonsList.reverse();
+            else if (sort.sortBy === 'name' && sort.direction === 'asc') pokemonsList.sort((a: Pokemon, b: Pokemon) => (a.name > b.name ? 1 : -1));
+            else if (sort.sortBy === 'name' && sort.direction === 'desc') pokemonsList.sort((a: Pokemon, b: Pokemon) => (a.name < b.name ? 1 : -1));
         }
         let index = (elementsPerPage * currentPage);
         let limit = (currentPage + 1) * elementsPerPage;
@@ -121,8 +120,8 @@ class PokemonTable extends Component<Props, State> {
                     <TableCell style={{ paddingTop: 0, paddingBottom: 0 }}>
                         <Button title='View characteristics' onClick={() => this.openCharacteristics(pokemon.url)}>
                             <div className='pokeball'>
-                                <img src={ClosedPokeball} />
-                                <img className='hover' src={OpenedPokeball} />
+                                <img src={ClosedPokeball} alt='closed-pokemon' />
+                                <img className='hover' src={OpenedPokeball} alt='opened-pokemon' />
                             </div>
                         </Button>
                     </TableCell>
@@ -145,7 +144,7 @@ class PokemonTable extends Component<Props, State> {
 
     handleSort = (id: 'id' | 'name' | 'picture') => {
         const { sortBy, direction } = this.state.sort;
-        const newDirection = ['asc', undefined].includes(direction) && sortBy == id ? 'desc' : 'asc';
+        const newDirection = ['asc', undefined].includes(direction) && sortBy === id ? 'desc' : 'asc';
         this.setState({ sort: { sortBy: id, sortDirection: newDirection, direction: newDirection } });
     }
 

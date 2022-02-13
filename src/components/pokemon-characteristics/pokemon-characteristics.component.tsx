@@ -59,7 +59,7 @@ class PokemonCharacteritics extends Component<Props, State> {
                             </Grid>
                             <Grid item xs={12} sx={{ padding: '10px', backgroundColor: '#112852' }}>{this.renderCharacteristics(characteristics)}</Grid>
                             <Grid item xs={12} sx={{ padding: '10px' }}>
-                                Data From <a href='https://pokeapi.co/' target='_blank' style={{ color: '#FFCC00', fontWeight: 'bolder' }}>PokeAPI.co</a>
+                                Data From <a href='https://pokeapi.co/' target='_blank' rel='noreferrer' style={{ color: '#FFCC00', fontWeight: 'bolder' }}>PokeAPI.co</a>
                             </Grid>
                         </Grid>}
                 </Paper>

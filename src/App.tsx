@@ -3,7 +3,7 @@ import Home from './components/home/home.component';
 import PokemonTable from './components/pokemon-table/pokemon-table.component';
 import PokemonCharacteritics from './components/pokemon-characteristics/pokemon-characteristics.component';
 // Libraries
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { HashRouter, Route, Switch } from 'react-router-dom';
 import { Grid, ThemeProvider } from '@mui/material';
 // Styles
 import './App.css';
@@ -15,13 +15,13 @@ function App() {
       <div style={{ height: '100vh', overflowX: 'hidden' }}>
         <Grid container spacing={2} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '25px 0' }}>
           <Grid item xs={6} sx={{ minWidth: '750px' }}>
-            <BrowserRouter>
+            <HashRouter>
               <Switch>
                 <Route path='/' exact render={props => <Home {...props} />} />
                 <Route path='/pokemons' exact render={props => <PokemonTable {...props} />} />
                 <Route path='/characteristics' render={props => <PokemonCharacteritics {...props} />} />
               </Switch>
-            </BrowserRouter>
+            </HashRouter>
           </Grid>
         </Grid>
       </div>
