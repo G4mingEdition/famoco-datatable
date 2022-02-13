@@ -4,11 +4,12 @@ import PokemonLogo from '../../assets/pictures/pokemon.png';
 import OpenedPokeball from '../../assets/pictures/opened-pokeball.png';
 import ClosedPokeball from '../../assets/pictures/closed-pokeball.png';
 // Components
-import { Grid, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableSortLabel } from '@mui/material';
+import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableSortLabel } from '@mui/material';
 // Libraries
 import { connect } from 'react-redux';
-import { PokemonsState } from '../../redux/reducers/pokemonsReducer';
+import { PokemonsState } from '../../redux/reducers/reducer';
 import { setPokemons, setCharacteristics } from '../../redux/actions/pokemonsActions';
+import { setPokemonTableState, setScrollTop } from '../../redux/actions/appActions';
 // Services
 import PokemonService from '../../services/pokemon.service';
 // Styles
@@ -36,24 +37,22 @@ class PokemonTable extends Component<Props, State> {
         const { currentPage, elementsPerPage } = this.state;
 
         return (
-            <Grid container spacing={2} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '50px 0' }}>
-                <Grid item xs={6}>
-                    <Paper style={{ padding: '25px', marginBottom: '20px' }}>
-                        <img src={PokemonLogo} alt='Pokemon' style={{ display: 'block', width: '50%', marginLeft: 'auto', marginRight: 'auto' }} />
-                        <p>
-                            This list represents the order of Pokemon in the National Pokédex.
-                            Kanto region Pokémon appear first (001 to 151).
-                        </p>
-                    </Paper>
-                    {this.renderDataTable(currentPage, elementsPerPage, pokemons)}
-                </Grid>
-            </Grid>
+            <>
+                {this.renderDataTable(currentPage, elementsPerPage, pokemons)}
+            </>
         );
     }
 
     componentDidMount = () => {
         if (!this.props.pokemons.length)
             PokemonService.getAll().then((pokemons: Pokemon[]) => this.props.setPokemons(pokemons));
+        else if (this.props.pokemonTableState) {
+            this.setState(this.props.pokemonTableState, () => {
+                const table = document.getElementById('pokemon-table');
+                if (table) table.scrollTop = this.props.scrollTop;
+                this.props.setScrollTop(0);
+            });
+        }
     }
 
     renderDataTable = (currentPage: number, elementsPerPage: number, pokemons: Pokemon[]) => {
@@ -61,7 +60,7 @@ class PokemonTable extends Component<Props, State> {
 
         return (
             <Paper>
-                <TableContainer sx={{ height: '75vh', borderRadius: '10px' }}>
+                <TableContainer sx={{ height: '75vh', borderRadius: '10px' }} id='pokemon-table'>
                     <Table stickyHeader>
                         <TableHead>
                             <TableRow>
@@ -144,29 +143,36 @@ class PokemonTable extends Component<Props, State> {
         this.setState({ elementsPerPage, currentPage });
     }
 
-    openCharacteristics = (url: string) => {
-        PokemonService.getCharacteristics(url).then(characteristics => {
-            this.props.setCharacteristics(characteristics);
-            this.props.history.push('/characteristics');
-        });
-    }
-
     handleSort = (id: 'id' | 'name' | 'picture') => {
         const { sortBy, direction } = this.state.sort;
         const newDirection = ['asc', undefined].includes(direction) && sortBy == id ? 'desc' : 'asc';
         this.setState({ sort: { sortBy: id, sortDirection: newDirection, direction: newDirection } });
     }
+
+    openCharacteristics = (url: string) => {
+        const table = document.getElementById('pokemon-table');
+        this.props.setScrollTop(table?.scrollTop || 0);
+        PokemonService.getCharacteristics(url).then(characteristics => {
+            this.props.setPokemonTableState(this.state);
+            this.props.setCharacteristics(characteristics);
+            this.props.history.push('/characteristics');
+        });
+    }
 }
 
 const mapStateToProps = (state: PokemonsState) => {
     return {
-        pokemons: state.pokemons
+        pokemons: state.pokemons,
+        pokemonTableState: state.pokemonTableState,
+        scrollTop: state.scrollTop
     };
 }
 
 const mapDispatchToProps = {
     setPokemons,
-    setCharacteristics
+    setCharacteristics,
+    setPokemonTableState,
+    setScrollTop
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PokemonTable);

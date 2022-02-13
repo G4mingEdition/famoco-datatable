@@ -5,7 +5,7 @@ import { Button, Chip, Divider, Grid, IconButton, LinearProgress, Paper, Typogra
 import { Box } from '@mui/system';
 // Libraries
 import { connect } from 'react-redux';
-import { PokemonsState } from '../../redux/reducers/pokemonsReducer';
+import { PokemonsState } from '../../redux/reducers/reducer';
 import { setCharacteristics } from '../../redux/actions/pokemonsActions';
 // Styles
 import './pokemon-characteristics.css';
@@ -14,6 +14,7 @@ import { Props, State } from './pokemon-characteristics.type';
 import Type from '../../types/type.type';
 import Characteristics from '../../types/characteristics.type';
 import Stat from '../../types/stat.type';
+import Ability from '../../types/ability.type';
 
 const TYPE_COLORS: any = {
     bug: '#B1C12E',
@@ -39,37 +40,35 @@ const TYPE_COLORS: any = {
 class PokemonCharacteritics extends Component<Props, State> {
     render() {
         const { characteristics } = this.props;
-
+        console.log(characteristics?.abilities)
         return (
-            <Grid container spacing={2} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '50px 0' }}>
-                <Grid item xs={6}>
-                    <Paper sx={{ overflow: 'hidden' }}>
-                        {characteristics &&
-                            <Grid container>
-                                <Grid item xs={12} sx={{ padding: '10px' }}>
-                                    <Grid container>
-                                        <Grid item xs={6} sx={{ display: 'flex', alignItems: 'center' }}>
-                                            <IconButton onClick={() => this.goBackToList()}>
-                                                <ArrowBackIosNewIcon />
-                                            </IconButton>
-                                            <Chip label={characteristics?.order} style={{ marginLeft: '10px' }} />
-                                        </Grid>
-                                        <Grid item xs={6} sx={{ display: 'flex' }}>{this.renderTypes(characteristics.types)}</Grid>
+            <>
+                <Paper sx={{ overflow: 'hidden' }}>
+                    {characteristics &&
+                        <Grid container>
+                            <Grid item xs={12} sx={{ padding: '10px' }}>
+                                <Grid container>
+                                    <Grid item xs={6} sx={{ display: 'flex', alignItems: 'center' }}>
+                                        <IconButton onClick={() => this.goBackToList()}>
+                                            <ArrowBackIosNewIcon />
+                                        </IconButton>
+                                        <Chip label={characteristics?.order} style={{ marginLeft: '10px' }} />
                                     </Grid>
+                                    <Grid item xs={6} sx={{ display: 'flex', alignItems: 'center' }}>{this.renderTypes(characteristics.types)}</Grid>
                                 </Grid>
-                                <Grid item xs={12} sx={{ padding: '10px', backgroundColor: '#112852' }}>{this.renderCharacteristics(characteristics)}</Grid>
-                                <Grid item xs={12} sx={{ padding: '10px' }}>
-                                    Data From <a href='https://pokeapi.co/' target='_blank' style={{ color: '#FFCC00', fontWeight: 'bolder' }}>PokeAPI.co</a>
-                                </Grid>
-                            </Grid>}
-                    </Paper>
-                </Grid>
-            </Grid>
+                            </Grid>
+                            <Grid item xs={12} sx={{ padding: '10px', backgroundColor: '#112852' }}>{this.renderCharacteristics(characteristics)}</Grid>
+                            <Grid item xs={12} sx={{ padding: '10px' }}>
+                                Data From <a href='https://pokeapi.co/' target='_blank' style={{ color: '#FFCC00', fontWeight: 'bolder' }}>PokeAPI.co</a>
+                            </Grid>
+                        </Grid>}
+                </Paper>
+            </>
         );
     }
 
     componentDidMount = () => {
-        if (!this.props.characteristics) this.props.history.push('/');
+        if (!this.props.characteristics) this.props.history.push('/pokemons');
     }
 
     renderTypes = (types: Type[]) => {
@@ -81,7 +80,7 @@ class PokemonCharacteritics extends Component<Props, State> {
     renderCharacteristics = (characteristics: Characteristics) => {
         const sprites = characteristics.sprites;
         return (
-            <Grid container spacing={2} sx={{ padding: '25px' }}>
+            <Grid container spacing={2} sx={{ padding: '0 25px 25px 25px' }}>
                 <Grid item xs={3} sx={{ display: 'flex', alignItems: 'center' }}>
                     <img src={sprites.front_default} alt='pokemon' style={{ width: '100%' }} />
                 </Grid>
@@ -90,24 +89,18 @@ class PokemonCharacteritics extends Component<Props, State> {
                     {this.renderStats(characteristics.stats)}
                 </Grid>
                 <Grid item xs={12}>
-                    <Divider />
+                    <Divider sx={{ mt: '15px' }} />
                 </Grid>
                 <Grid item xs={6}>
-                    <div style={{ marginRight: '10px' }}>
-                        <h3 style={{ textAlign: 'center' }}>Profile</h3>
-                        <Grid container spacing={2} sx={{ marginLeft: 'auto', marginRight: 'auto' }}>
-                            <Grid item xs={12}>
-                                <Grid container spacing={2}>
-                                    <Grid item xs={12}>
-                                        <Chip label={<><span style={{ fontWeight: 'bolder' }}>Height:</span> {characteristics.height}</>} sx={{ width: '100%' }} />
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <Chip label={<><span style={{ fontWeight: 'bolder' }}>Weight:</span> {characteristics.weight}</>} sx={{ width: '100%' }} />
-                                    </Grid>
-                                </Grid>
-                            </Grid>
+                    <h3 style={{ textAlign: 'center' }}>Profile</h3>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <Chip label={<><span style={{ fontWeight: 'bolder' }}>Height:</span> {characteristics.height}</>} sx={{ width: '100%', mt: '10px' }} />
                         </Grid>
-                    </div>
+                        <Grid item xs={12}>
+                            <Chip label={<><span style={{ fontWeight: 'bolder' }}>Weight:</span> {characteristics.weight}</>} sx={{ width: '100%' }} />
+                        </Grid>
+                    </Grid>
                 </Grid>
                 <Grid item xs={6}>
                     <div style={{ marginLeft: '10px' }}>
@@ -117,6 +110,12 @@ class PokemonCharacteritics extends Component<Props, State> {
                             {sprites.front_shiny && <img src={sprites.front_shiny} alt='pokemon' title='Shiny' />}
                             {sprites.front_shiny_female && <img src={sprites.front_shiny_female} alt='pokemon' title='Shiny female' />}
                         </div>
+                    </div>
+                </Grid>
+                <Grid item xs={12} style={{ paddingTop: 0 }}>
+                    <div style={{ marginRight: '10px' }}>
+                        <h3 style={{ textAlign: 'center' }}>Abilities</h3>
+                        <Grid container spacing={2}>{this.renderAbilities(characteristics.abilities)}</Grid>
                     </div>
                 </Grid>
             </Grid>
@@ -144,10 +143,17 @@ class PokemonCharacteritics extends Component<Props, State> {
         ));
     }
 
+    renderAbilities = (abilities: Ability[]) => {
+        return abilities.map((ability) => (
+            <Grid item xs={abilities.length > 2 ? 4 : 6}>
+                <Chip label={ability.ability.name.replace('-', ' ')} sx={{ width: '100%', fontWeight: 'bolder', textTransform: 'capitalize' }} />
+            </Grid>
+        ));
+    }
+
     goBackToList = () => {
-        console.log('ok')
         this.props.setCharacteristics(null);
-        this.props.history.push('/');
+        this.props.history.push('/pokemons');
     }
 }
 
