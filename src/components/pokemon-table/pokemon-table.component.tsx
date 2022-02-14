@@ -66,8 +66,8 @@ class PokemonTable extends Component<Props, State> {
             <Paper>
                 {!isLoading ?
                     <>
-                        <TableContainer sx={{ height: '75vh', borderRadius: '10px' }} id='pokemon-table'>
-                            <Table stickyHeader sx={{ height: '100%' }}>
+                        <TableContainer sx={{ height: '75vh', borderRadius: '10px 10px 0 0', backgroundColor: '#0A285F' }} id='pokemon-table'>
+                            <Table stickyHeader>
                                 <TableHead>
                                     <TableRow>
                                         <TableCell sortDirection={sort.sortBy === 'id' ? sort.sortDirection : false}>
