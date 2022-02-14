@@ -3,7 +3,7 @@ import { Component } from 'react';
 import OpenedPokeball from '../../assets/pictures/opened-pokeball.png';
 import ClosedPokeball from '../../assets/pictures/closed-pokeball.png';
 // Components
-import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableSortLabel } from '@mui/material';
+import { Box, Button, CircularProgress, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableSortLabel } from '@mui/material';
 // Libraries
 import { connect } from 'react-redux';
 import { PokemonsState } from '../../redux/reducers/reducer';
@@ -21,6 +21,7 @@ class PokemonTable extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
+            isLoading: false,
             currentPage: 0,
             elementsPerPage: 25,
             sort: {
@@ -43,9 +44,13 @@ class PokemonTable extends Component<Props, State> {
     }
 
     componentDidMount = () => {
-        if (!this.props.pokemons.length)
-            PokemonService.getAll().then((pokemons: Pokemon[]) => this.props.setPokemons(pokemons));
-        else if (this.props.pokemonTableState) {
+        if (!this.props.pokemons.length) {
+            this.setState({ isLoading: true });
+            PokemonService.getAll().then((pokemons: Pokemon[]) => {
+                this.props.setPokemons(pokemons);
+                this.setState({ isLoading: false });
+            });
+        } else if (this.props.pokemonTableState) {
             this.setState(this.props.pokemonTableState, () => {
                 const table = document.getElementById('pokemon-table');
                 if (table) table.scrollTop = this.props.scrollTop;
@@ -55,38 +60,44 @@ class PokemonTable extends Component<Props, State> {
     }
 
     renderDataTable = (currentPage: number, elementsPerPage: number, pokemons: Pokemon[]) => {
-        const { sort } = this.state;
+        const { isLoading, sort } = this.state;
 
         return (
             <Paper>
-                <TableContainer sx={{ height: '75vh', borderRadius: '10px' }} id='pokemon-table'>
-                    <Table stickyHeader>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell sortDirection={sort.sortBy === 'id' ? sort.sortDirection : false}>
-                                    <TableSortLabel active={sort.sortBy === 'id'} direction={sort.sortBy === 'id' ? sort.direction : 'asc'} onClick={() => this.handleSort('id')}>
-                                        ID
-                                    </TableSortLabel>
-                                </TableCell>
-                                <TableCell sortDirection={sort.sortBy === 'name' ? sort.sortDirection : false}>
-                                    <TableSortLabel active={sort.sortBy === 'name'} direction={sort.sortBy === 'name' ? sort.direction : 'asc'} onClick={() => this.handleSort('name')}>
-                                        Name
-                                    </TableSortLabel>
-                                </TableCell>
-                                <TableCell>Picture</TableCell>
-                                <TableCell></TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>{pokemons.length > 0 && this.renderRows(currentPage, elementsPerPage, pokemons)}</TableBody>
-                    </Table>
-                </TableContainer>
-                {pokemons.length > 0 &&
-                    <TablePagination
-                        component='div' count={pokemons.length} rowsPerPage={elementsPerPage} page={currentPage}
-                        style={{ display: 'block', width: '100%', borderRadius: '0 0 10px 10px' }}
-                        onPageChange={this.handleChangePage}
-                        onRowsPerPageChange={this.handleChangeRowsPerPage}
-                    />}
+                {!isLoading ?
+                    <>
+                        <TableContainer sx={{ height: '75vh', borderRadius: '10px' }} id='pokemon-table'>
+                            <Table stickyHeader sx={{ height: '100%' }}>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell sortDirection={sort.sortBy === 'id' ? sort.sortDirection : false}>
+                                            <TableSortLabel active={sort.sortBy === 'id'} direction={sort.sortBy === 'id' ? sort.direction : 'asc'} onClick={() => this.handleSort('id')}>
+                                                ID
+                                            </TableSortLabel>
+                                        </TableCell>
+                                        <TableCell sortDirection={sort.sortBy === 'name' ? sort.sortDirection : false}>
+                                            <TableSortLabel active={sort.sortBy === 'name'} direction={sort.sortBy === 'name' ? sort.direction : 'asc'} onClick={() => this.handleSort('name')}>
+                                                Name
+                                            </TableSortLabel>
+                                        </TableCell>
+                                        <TableCell>Picture</TableCell>
+                                        <TableCell></TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>{pokemons.length > 0 && this.renderRows(currentPage, elementsPerPage, pokemons)}</TableBody>
+                            </Table>
+                        </TableContainer>
+                        {pokemons.length > 0 &&
+                            <TablePagination
+                                component='div' count={pokemons.length} rowsPerPage={elementsPerPage} page={currentPage}
+                                style={{ display: 'block', width: '100%', borderRadius: '0 0 10px 10px' }}
+                                onPageChange={this.handleChangePage}
+                                onRowsPerPageChange={this.handleChangeRowsPerPage}
+                            />}
+                    </>
+                    : <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '75vh', width: '100%' }}>
+                        <CircularProgress />
+                    </Box>}
             </Paper>
         );
     }
@@ -149,9 +160,11 @@ class PokemonTable extends Component<Props, State> {
     }
 
     openCharacteristics = (url: string) => {
+        this.setState({ isLoading: true });
         const table = document.getElementById('pokemon-table');
         this.props.setScrollTop(table?.scrollTop || 0);
         PokemonService.getCharacteristics(url).then(characteristics => {
+            this.setState({ isLoading: false });
             this.props.setPokemonTableState(this.state);
             this.props.setCharacteristics(characteristics);
             this.props.history.push('/characteristics');

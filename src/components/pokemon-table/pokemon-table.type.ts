@@ -16,6 +16,7 @@ export interface Props extends RouteComponentProps {
 }
 
 export interface State {
+    isLoading: boolean,
     currentPage: number,
     elementsPerPage: number,
     sort: {
