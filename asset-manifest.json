@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/meotec-datatable/static/css/main.c96fcc88.css",
-    "main.js": "/meotec-datatable/static/js/main.8b2f1cc4.js",
+    "main.js": "/meotec-datatable/static/js/main.d4bd943e.js",
     "static/js/787.34c6d9b1.chunk.js": "/meotec-datatable/static/js/787.34c6d9b1.chunk.js",
     "static/media/landscape.gif": "/meotec-datatable/static/media/landscape.643a462b9bcd943e1c94.gif",
     "static/media/pokemon.png": "/meotec-datatable/static/media/pokemon.16d0ce56c0dd53b0a201.png",
     "index.html": "/meotec-datatable/index.html",
     "main.c96fcc88.css.map": "/meotec-datatable/static/css/main.c96fcc88.css.map",
-    "main.8b2f1cc4.js.map": "/meotec-datatable/static/js/main.8b2f1cc4.js.map",
+    "main.d4bd943e.js.map": "/meotec-datatable/static/js/main.d4bd943e.js.map",
     "787.34c6d9b1.chunk.js.map": "/meotec-datatable/static/js/787.34c6d9b1.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.c96fcc88.css",
-    "static/js/main.8b2f1cc4.js"
+    "static/js/main.d4bd943e.js"
   ]
 }
